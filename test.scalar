@@ -20,4 +20,5 @@ val dfMySQL2 = spark.read.jdbc(urlMySQL2, "users", propertiesMySQL2)
 val diffDF = dfMySQL1.except(dfMySQL2)
 
 // Salvar dados diferentes no banco MySQL
-diffDF.write.mode("append").option("error", "ignore").jdbc(urlMySQL2, "users", propertiesMySQL2)
+// diffDF.write.mode("append").option("error", "ignore").jdbc(urlMySQL2, "users", propertiesMySQL2)
+diffDF.write.mode("overwrite").option("error", "ignore").jdbc(urlMySQL2, "users", propertiesMySQL2)
