@@ -1,0 +1,23 @@
+import java.util.Properties
+
+
+val urlMySQL1 = "jdbc:mysql://database1:3306/test1" // URL JDBC para MySQL
+val propertiesMySQL1 = new Properties()
+propertiesMySQL1.setProperty("user", "test1") // substitua com seu nome de usuário
+propertiesMySQL1.setProperty("password", "test1") // substitua com sua senha
+
+
+val urlMySQL2 = "jdbc:mysql://database2:3306/test2" // URL JDBC para MySQL
+val propertiesMySQL2 = new Properties()
+propertiesMySQL2.setProperty("user", "test2") // substitua com seu nome de usuário
+propertiesMySQL2.setProperty("password", "test2") // substitua com sua senha
+
+
+val dfMySQL1 = spark.read.jdbc(urlMySQL1, "users", propertiesMySQL1)
+val dfMySQL2 = spark.read.jdbc(urlMySQL2, "users", propertiesMySQL2)
+
+// Comparação dos dados
+val diffDF = dfMySQL1.except(dfMySQL2)
+
+// Salvar dados diferentes no banco MySQL
+diffDF.write.mode("append").option("error", "ignore").jdbc(urlMySQL2, "users", propertiesMySQL2)
